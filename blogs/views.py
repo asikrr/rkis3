@@ -1,7 +1,12 @@
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
 
-from blogs.forms import SignUpForm
+from .forms import SignUpForm, PostCreationForm
+from .models import Post
 
 
 def index(request):
@@ -20,5 +25,19 @@ def register(request):
     return render(request, 'registration/register.html', {'form': form})
 
 
+@login_required
 def profile(request):
-    return render(request, 'registration/profile.html')
+    user_posts_list = Post.objects.filter(author=request.user)
+    return render(request, 'registration/profile.html', {'user_posts_list': user_posts_list})
+
+
+class PostCreate(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostCreationForm
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self, form):
+        fields = form.save(commit=False)
+        fields.author = self.request.user
+        fields.save()
+        return super().form_valid(form)
