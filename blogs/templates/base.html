@@ -6,8 +6,15 @@
 </head>
 <body>
     <header>
-        {% block header %}
-        {% endblock %}
+        <nav>
+            <a href="/">Главная</a>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'register' %}">Регистрация</a>
+            <a href="{% url 'login' %}">Вход</a>
+            {% else %}
+            <a href="{% url 'profile' %}">Профиль</a>
+            {% endif %}
+        </nav>
     </header>
     <main>
         {% block content %}
