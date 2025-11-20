@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Пост{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.datetime }}</p>
+<p>{{ post.content }}</p>
+<a href="{% url 'post-update' post.pk %}">Редактировать</a>
+<a href="{% url 'post-delete' post.pk %}">Удалить</a>
+{% endblock %}

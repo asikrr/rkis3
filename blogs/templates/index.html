@@ -7,11 +7,13 @@
 {% if page_obj %}
     {% for post in page_obj %}
         <div>
-            <h4>{{ post.title }}</h4>
+            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
             <p>{{ post.datetime }}</p>
             <p>{{ post.content }}</p>
             <p>{{ post.like_set.all.count }}</p>
             <a href="{% url 'post-like' post.pk %}">Нравится</a>
+            <p>{{ post.comment_set.all.count }}</p>
+            <a href="/">Комментарии</a>
         </div>
     {% endfor %}
     <div class="pagination">

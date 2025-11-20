@@ -5,20 +5,41 @@
 {% block content %}
 <h1>Профиль</h1>
 {{ user }}
-<a href="{% url 'post-create' %}">Создать пост</a>
-{% if user_posts_list %}
-    {% for post in user_posts_list %}
-        <div>
-            <h4>{{ post.title }}</h4>
-            <p>{{ post.datetime }}</p>
-            <p>{{ post.content }}</p>
-        </div>
-    {% endfor %}
-{% else %}
-<p>У вас еще нет постов</p>
-{% endif %}
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
     <button type="submit">Выход</button>
 </form>
+<a href="{% url 'post-create' %}">Создать пост</a>
+{% if page_obj %}
+    {% for post in page_obj %}
+        <div>
+            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+            <p>{{ post.datetime }}</p>
+            <p>{{ post.content }}</p>
+            <p>{{ post.like_set.all.count }}</p>
+            <a href="{% url 'post-like' post.pk %}">Нравится</a>
+            <p>{{ post.comment_set.all.count }}</p>
+            <a href="/">Комментарии</a>
+        </div>
+    {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+        </span>
+    </div>
+{% else %}
+    <p>Постов еще нет</p>
+{% endif %}
 {% endblock %}

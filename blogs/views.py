@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from .forms import SignUpForm, PostCreationForm
 from .models import Post, Like
@@ -33,8 +33,12 @@ def register(request):
 
 @login_required
 def profile(request):
-    user_posts_list = Post.objects.filter(author=request.user)
-    return render(request, 'registration/profile.html', {'user_posts_list': user_posts_list})
+    post_pages = Post.objects.filter(author=request.user)
+    paginator = Paginator(post_pages, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'registration/profile.html', {'page_obj': page_obj})
 
 
 @login_required
@@ -59,3 +63,25 @@ class PostCreate(LoginRequiredMixin, CreateView):
         fields.author = self.request.user
         fields.save()
         return super().form_valid(form)
+
+
+class PostDetail(LoginRequiredMixin, DetailView):
+    model = Post
+
+
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    model = Post
+    form_class = PostCreationForm
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_update'] = True
+        return context
+
+
+class PostDelete(LoginRequiredMixin, DeleteView):
+    model = Post
+    success_url = reverse_lazy('profile')

@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Создание поста{% endblock %}
+{% block title %}{% if is_update %}Изменение поста{% else %}Создание поста{% endif %}{% endblock %}
 
 {% block content %}
-<h1>Создание поста</h1>
+<h1>{% if is_update %}Изменение поста{% else %}Создание поста{% endif %}</h1>
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Создать</button>
+    <button type="submit">Готово</button>
 </form>
 {% endblock %}
