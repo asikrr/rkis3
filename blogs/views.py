@@ -2,12 +2,12 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView
 
 from .forms import SignUpForm, PostCreationForm
-from .models import Post
+from .models import Post, Like
 
 
 def index(request):
@@ -35,6 +35,18 @@ def register(request):
 def profile(request):
     user_posts_list = Post.objects.filter(author=request.user)
     return render(request, 'registration/profile.html', {'user_posts_list': user_posts_list})
+
+
+@login_required
+def like(request, pk):
+    post = get_object_or_404(Post, id=pk)
+
+    if Like.objects.filter(user=request.user, post=post).exists():
+        Like.objects.filter(user=request.user, post=post).delete()
+    else:
+        Like.objects.create(user=request.user, post=post)
+
+    return redirect('index')
 
 
 class PostCreate(LoginRequiredMixin, CreateView):
