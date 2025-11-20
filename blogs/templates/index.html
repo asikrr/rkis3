@@ -4,4 +4,32 @@
 
 {% block content %}
 <h1>Главная</h1>
+{% if page_obj %}
+    {% for post in page_obj %}
+        <div>
+            <h4>{{ post.title }}</h4>
+            <p>{{ post.datetime }}</p>
+            <p>{{ post.content }}</p>
+        </div>
+    {% endfor %}
+    <div class="pagination">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+        {% endif %}
+        </span>
+    </div>
+{% else %}
+    <p>Постов еще нет</p>
+{% endif %}
 {% endblock %}
