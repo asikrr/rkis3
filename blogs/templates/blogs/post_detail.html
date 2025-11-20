@@ -8,4 +8,21 @@
 <p>{{ post.content }}</p>
 <a href="{% url 'post-update' post.pk %}">Редактировать</a>
 <a href="{% url 'post-delete' post.pk %}">Удалить</a>
+<form method="post" enctype="multipart/form-data" action="{% url 'comment-create' post.pk %}">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Отправить</button>
+</form>
+
+
+<h2>Комментарии пользователей:</h2>
+{% if post.comment_set.all %}
+    {% for comment in post.comment_set.all %}
+        <img src="{{ user.avatar.url }}" width="100px">
+        <p>{{ comment.author }}</p>
+        <p>{{ comment.text }}</p>
+    {% endfor %}
+    {% else %}
+        <p>Нет комментариев</p>
+{% endif %}
 {% endblock %}

@@ -6,8 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
-from .forms import SignUpForm, PostCreationForm
-from .models import Post, Like
+from .forms import SignUpForm, PostCreationForm, CommentCreationForm
+from .models import Post, Like, Comment
 
 
 def index(request):
@@ -21,7 +21,7 @@ def index(request):
 
 def register(request):
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
+        form = SignUpForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -68,6 +68,11 @@ class PostCreate(LoginRequiredMixin, CreateView):
 class PostDetail(LoginRequiredMixin, DetailView):
     model = Post
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CommentCreationForm()
+        return context
+
 
 class PostUpdate(LoginRequiredMixin, UpdateView):
     model = Post
@@ -85,3 +90,20 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = reverse_lazy('profile')
+
+
+class CommentCreate(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentCreationForm
+
+    def form_valid(self, form):
+        fields = form.save(commit=False)
+        fields.author = self.request.user
+        post_id = self.kwargs.get('pk')
+        post = get_object_or_404(Post, id=post_id)
+        fields.post = post
+        fields.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
