@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from .forms import SignUpForm, PostCreationForm, CommentCreationForm
-from .models import Post, Like, Comment
+from .models import Post, Like, Comment, CustomUser
 
 
 def index(request):
@@ -51,6 +51,23 @@ def like(request, pk):
         Like.objects.create(user=request.user, post=post)
 
     return redirect('index')
+
+
+class ProfileUpdate(LoginRequiredMixin, UpdateView):
+    model = CustomUser
+    fields = ['username', 'avatar', 'bio']
+    success_url = reverse_lazy('profile')
+
+    def get_object(self):
+        return self.request.user
+
+
+class ProfileDelete(LoginRequiredMixin, DeleteView):
+    model = CustomUser
+    success_url = reverse_lazy('index')
+
+    def get_object(self):
+        return self.request.user
 
 
 class PostCreate(LoginRequiredMixin, CreateView):

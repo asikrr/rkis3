@@ -4,7 +4,11 @@
 
 {% block content %}
 <h1>Профиль</h1>
-{{ user }}
+<img src="{{ user.avatar.url }}" width="100px" alt="Аватарка">
+<p>{{ user }}</p>
+<p>{{ user.bio }}</p>
+<a href="{% url 'profile-update' %}">Редактировать</a>
+<a href="{% url 'profile-delete' %}">Удалить аккаунт</a>
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
     <button type="submit">Выход</button>
@@ -19,7 +23,7 @@
             <p>{{ post.like_set.all.count }}</p>
             <a href="{% url 'post-like' post.pk %}">Нравится</a>
             <p>{{ post.comment_set.all.count }}</p>
-            <a href="/">Комментарии</a>
+            <a href="{% url 'post-detail' post.pk %}">Комментарии</a>
         </div>
     {% endfor %}
     <div class="pagination">

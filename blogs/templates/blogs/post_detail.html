@@ -6,8 +6,10 @@
 <h1>{{ post.title }}</h1>
 <p>{{ post.datetime }}</p>
 <p>{{ post.content }}</p>
+{% if user == post.author %}
 <a href="{% url 'post-update' post.pk %}">Редактировать</a>
 <a href="{% url 'post-delete' post.pk %}">Удалить</a>
+{% endif %}
 <form method="post" enctype="multipart/form-data" action="{% url 'comment-create' post.pk %}">
     {% csrf_token %}
     {{ form }}
@@ -18,7 +20,7 @@
 <h2>Комментарии пользователей:</h2>
 {% if post.comment_set.all %}
     {% for comment in post.comment_set.all %}
-        <img src="{{ user.avatar.url }}" width="100px">
+        <img src="{{ comment.author.avatar.url }}" width="100px" alt="Аватарка">
         <p>{{ comment.author }}</p>
         <p>{{ comment.text }}</p>
     {% endfor %}
