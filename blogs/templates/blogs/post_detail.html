@@ -3,28 +3,64 @@
 {% block title %}Пост{% endblock %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<p>{{ post.datetime }}</p>
-<p>{{ post.content }}</p>
-{% if user == post.author %}
-<a href="{% url 'post-update' post.pk %}">Редактировать</a>
-<a href="{% url 'post-delete' post.pk %}">Удалить</a>
-{% endif %}
-<form method="post" enctype="multipart/form-data" action="{% url 'comment-create' post.pk %}">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Отправить</button>
-</form>
+<article class="post-card">
+    <header class="post-header">
+        <img class="avatar avatar-post"
+             src="{{ post.author.avatar.url }}"
+             alt="Аватарка автора">
+        <div class="post-header-info">
+            <h1 class="post-title">{{ post.title }}</h1>
+            <p class="post-date">{{ post.datetime }}</p>
+        </div>
+    </header>
 
+    <p class="post-content">{{ post.content }}</p>
 
-<h2>Комментарии пользователей:</h2>
-{% if post.comment_set.all %}
-    {% for comment in post.comment_set.all %}
-        <img src="{{ comment.author.avatar.url }}" width="100px" alt="Аватарка">
-        <p>{{ comment.author }}</p>
-        <p>{{ comment.text }}</p>
-    {% endfor %}
+    <p>Лайков: {{ post.like_set.all.count }}</p>
+    <a href="{% url 'post-like' post.pk %}?next={% url 'post-detail' post.pk %}">Нравится</a>
+
+    {% if user == post.author %}
+        <div class="post-actions">
+            <a href="{% url 'post-update' post.pk %}">Редактировать</a>
+            <a href="{% url 'post-delete' post.pk %}">Удалить</a>
+        </div>
+    {% endif %}
+</article>
+
+<section class="comments">
+    <h2>Комментарии пользователей</h2>
+
+    <form class="comment-form" method="post" enctype="multipart/form-data"
+          action="{% url 'comment-create' post.pk %}">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Отправить</button>
+    </form>
+
+    {% if post.comment_set.all %}
+        <div class="comment-list">
+            {% for comment in post.comment_set.all %}
+                <article class="comment">
+                    <img class="avatar avatar-small"
+                         src="{{ comment.author.avatar.url }}"
+                         alt="Аватарка комментатора">
+
+                    <div class="comment-body">
+                        <p class="comment-author">{{ comment.author }}</p>
+                        <p class="comment-text">{{ comment.text }}</p>
+
+                        {% if user.is_authenticated and user == comment.author %}
+                            <div class="comment-actions">
+                                <a href="{% url 'comment-update' comment.pk %}">Редактировать</a>
+                                <a href="{% url 'comment-delete' comment.pk %}">Удалить</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
     {% else %}
         <p>Нет комментариев</p>
-{% endif %}
+    {% endif %}
+</section>
 {% endblock %}

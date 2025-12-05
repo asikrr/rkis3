@@ -4,42 +4,73 @@
 
 {% block content %}
 <h1>Профиль</h1>
-<img src="{{ user.avatar.url }}" width="100px" alt="Аватарка">
-<p>{{ user }}</p>
-<p>{{ user.bio }}</p>
-<a href="{% url 'profile-update' %}">Редактировать</a>
-<a href="{% url 'profile-delete' %}">Удалить аккаунт</a>
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Выход</button>
-</form>
-<a href="{% url 'post-create' %}">Создать пост</a>
+
+<section class="profile">
+    <div class="profile-header">
+        <img class="avatar avatar-large" src="{{ user.avatar.url }}" alt="Аватарка">
+        <div class="profile-header-info">
+            <p class="profile-name">{{ user }}</p>
+            <p class="profile-bio">{{ user.bio }}</p>
+
+            <div class="profile-actions">
+                <a href="{% url 'profile-update' %}">Редактировать</a>
+                <a href="{% url 'profile-delete' %}">Удалить аккаунт</a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выход</button>
+                </form>
+                <a href="{% url 'post-create' %}">Создать пост</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<h2>Мои посты</h2>
+
 {% if page_obj %}
     {% for post in page_obj %}
-        <div>
-            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-            <p>{{ post.datetime }}</p>
-            <p>{{ post.content }}</p>
-            <p>{{ post.like_set.all.count }}</p>
-            <a href="{% url 'post-like' post.pk %}">Нравится</a>
-            <p>{{ post.comment_set.all.count }}</p>
-            <a href="{% url 'post-detail' post.pk %}">Комментарии</a>
-        </div>
+        <article class="post-card">
+            <header class="post-header">
+                <img class="avatar avatar-post"
+                     src="{{ user.avatar.url }}"
+                     alt="Аватарка автора">
+                <div class="post-header-info">
+                    <a class="post-title" href="{% url 'post-detail' post.pk %}">
+                        {{ post.title }}
+                    </a>
+                    <p class="post-date">{{ post.datetime }}</p>
+                </div>
+            </header>
+
+            <p class="post-content">{{ post.content }}</p>
+
+            <footer class="post-footer">
+                <div class="post-footer-item">
+                    <span>Лайков: {{ post.like_set.all.count }}</span>
+                    <a href="{% url 'post-like' post.pk %}">Нравится</a>
+                </div>
+                <div class="post-footer-item">
+                    <span>Комментариев: {{ post.comment_set.all.count }}</span>
+                    <a href="{% url 'post-detail' post.pk %}">Комментарии</a>
+                </div>
+            </footer>
+        </article>
     {% endfor %}
+
     <div class="pagination">
         <span class="step-links">
         {% if page_obj.has_previous %}
-        <a href="?page=1">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            <a href="?page=1">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
         {% endif %}
 
         <span class="current">
-        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
         {% endif %}
         </span>
     </div>

@@ -4,33 +4,51 @@
 
 {% block content %}
 <h1>Главная</h1>
+
 {% if page_obj %}
     {% for post in page_obj %}
-        <div>
-            <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-            <img src="{{ post.author.avatar.url }}" width="100px" alt="Аватарка">
-            <p>{{ post.datetime }}</p>
-            <p>{{ post.content }}</p>
-            <p>{{ post.like_set.all.count }}</p>
-            <a href="{% url 'post-like' post.pk %}">Нравится</a>
-            <p>{{ post.comment_set.all.count }}</p>
-            <a href="/">Комментарии</a>
-        </div>
+        <article class="post-card">
+            <header class="post-header">
+                <img class="avatar avatar-post"
+                     src="{{ post.author.avatar.url }}"
+                     alt="Аватарка автора">
+                <div class="post-header-info">
+                    <a class="post-title" href="{% url 'post-detail' post.pk %}">
+                        {{ post.title }}
+                    </a>
+                    <p class="post-date">{{ post.datetime }}</p>
+                </div>
+            </header>
+
+            <p class="post-content">{{ post.content }}</p>
+
+            <footer class="post-footer">
+                <div class="post-footer-item">
+                    <span>Лайков: {{ post.like_set.all.count }}</span>
+                    <a href="{% url 'post-like' post.pk %}">Нравится</a>
+                </div>
+                <div class="post-footer-item">
+                    <span>Комментариев: {{ post.comment_set.all.count }}</span>
+                    <a href="{% url 'post-detail' post.pk %}">Комментарии</a>
+                </div>
+            </footer>
+        </article>
     {% endfor %}
+
     <div class="pagination">
         <span class="step-links">
         {% if page_obj.has_previous %}
-        <a href="?page=1">Первая</a>
-        <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            <a href="?page=1">Первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
         {% endif %}
 
         <span class="current">
-        Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
         {% endif %}
         </span>
     </div>

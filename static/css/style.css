@@ -1,0 +1,268 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f2f2f2;
+    color: #333;
+}
+
+.site-header {
+    background: #333;
+    color: #fff;
+}
+
+.nav {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    background: #444;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto 40px;
+    padding: 0 16px;
+}
+
+.avatar {
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+.avatar-large {
+    width: 100px;
+    height: 100px;
+}
+
+.avatar-post {
+    width: 60px;
+    height: 60px;
+}
+
+.avatar-small {
+    width: 40px;
+    height: 40px;
+}
+
+.post-card {
+    background: #fff;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.post-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.post-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+}
+
+.post-title:hover {
+    color: #007bff;
+}
+
+.post-date {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.post-content {
+    margin: 8px 0 12px;
+}
+
+.post-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.post-footer-item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.post-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.profile-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.profile-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-name {
+    margin: 0;
+    font-weight: 600;
+}
+
+.profile-bio {
+    margin: 4px 0 0;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.profile-actions form {
+    margin: 0;
+}
+
+.comments {
+    margin-top: 24px;
+}
+
+.comment-form {
+    margin-bottom: 16px;
+}
+
+.comment-list {
+    border-top: 1px solid #eee;
+}
+
+.comment {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-body {
+    flex: 1;
+}
+
+.comment-author {
+    margin: 0;
+    font-weight: 600;
+}
+
+.comment-text {
+    margin: 4px 0 6px;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 10px;
+    font-size: 0.85rem;
+}
+
+form {
+    margin: 10px 0;
+}
+
+form p {
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: inherit;
+}
+
+button,
+input[type="submit"] {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover,
+input[type="submit"]:hover {
+    background: #0056b3;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    margin: 0 4px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    background: #f9f9f9;
+}
+
+.pagination a:hover {
+    background: #e6e6e6;
+}
+
+.pagination .current {
+    margin: 0 4px;
+    font-weight: bold;
+}
+
+a {
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1, h2 {
+    margin-top: 0;
+}

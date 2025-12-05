@@ -120,6 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -132,3 +133,4 @@ MEDIA_URL = '/media/'
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = reverse_lazy('profile')
+LOGIN_URL = '/blogs/accounts/login/'
